@@ -18,7 +18,11 @@
 <body class="bg-slate-50 font-sans text-slate-900 antialiased">
 
   <main>
-    @yield('content')
+    @isset($slot)
+      {{ $slot }}
+    @else
+      @yield('content')
+    @endisset
   </main>
 
   @livewireScripts
