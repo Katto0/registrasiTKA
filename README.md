@@ -1,59 +1,100 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏫 Aplikasi Registrasi TKA (Tes Kemampuan Akademik)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Selamat datang di repositori Aplikasi Registrasi TKA. Aplikasi ini dibangun menggunakan framework **Laravel** dan dirancang untuk memudahkan proses pendaftaran sekolah, operator, dan siswa peserta TKA.
 
-## About Laravel
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Livewire](https://img.shields.io/badge/Livewire-4E56A6?style=for-the-badge&logo=livewire&logoColor=white)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📖 Dokumentasi API (Untuk Frontend)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Bagi tim Frontend yang ingin mengintegrasikan aplikasi dengan backend kami, silakan merujuk ke dokumentasi lengkap API di bawah ini:
 
-## Learning Laravel
+👉 **[BACA DOKUMENTASI BACKEND (backend.md)](backend.md)**
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Dokumentasi tersebut mencakup:
+- Daftar Endpoint API (Download Template, Pencarian Sekolah, Submit Pendaftaran).
+- Format Request & Response (JSON).
+- Contoh penggunaan.
+- Catatan penting terkait CSRF dan Upload File.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🚀 Fitur Utama
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- **Pendaftaran Sekolah & Operator:** Input data sekolah dan operator pendamping secara lengkap.
+- **Import Data Siswa:** Upload data siswa secara massal menggunakan template Excel.
+- **Validasi Data:** Pengecekan duplikasi NPSN dan validasi format file.
+- **Dashboard Admin:**
+  - Melihat daftar sekolah terdaftar.
+  - Filter berdasarkan Jenjang (SD/SMP).
+  - Pencarian real-time (Sekolah, NPSN, Operator).
+  - **Export Laporan Excel** sesuai filter yang dipilih.
+- **Responsive Design:** Tampilan optimal di Desktop, Tablet, dan Mobile.
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🛠 Instalasi & Menjalankan Project
 
-## Contributing
+Ikuti langkah-langkah berikut untuk menjalankan project di lokal Anda:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. **Clone Repositori**
+   ```bash
+   git clone https://github.com/username/registrasiTKA.git
+   cd registrasiTKA
+   ```
 
-## Code of Conduct
+2. **Install Dependencies**
+   ```bash
+   composer install
+   npm install
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. **Setup Environment**
+   Salin file `.env.example` menjadi `.env` dan sesuaikan konfigurasi database.
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-## Security Vulnerabilities
+4. **Migrasi & Seeding Database**
+   ```bash
+   php artisan migrate --seed
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. **Jalankan Aplikasi**
+   Buka dua terminal terpisah untuk menjalankan server PHP dan Vite (untuk aset frontend).
+   
+   *Terminal 1:*
+   ```bash
+   php artisan serve
+   ```
+   
+   *Terminal 2:*
+   ```bash
+   npm run dev
+   ```
 
-## License
+6. **Akses Aplikasi**
+   Buka browser dan kunjungi `http://localhost:8000`.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🧪 Menjalankan Testing
+
+Kami telah menyediakan automated testing untuk memastikan fitur berjalan dengan baik.
+
+```bash
+php artisan test
+```
+
+Ini akan menjalankan pengujian untuk:
+- Download template Excel.
+- Proses submit pendaftaran (valid & invalid).
+- Validasi data.
+
+---
+
+**Dibuat dengan ❤️ untuk kemajuan pendidikan.**

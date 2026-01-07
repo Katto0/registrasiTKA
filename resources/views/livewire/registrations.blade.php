@@ -1,104 +1,202 @@
-<div class="min-h-screen bg-slate-50">
-    <div class="md:flex">
-        <aside class="hidden md:block md:fixed md:inset-y-0 md:left-0 md:w-64 bg-white border-r border-slate-200 flex flex-col">
-            <div class="flex h-16 items-center px-6 border-b border-slate-200">
-                <div class="mr-3 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
-                    </svg>
+<div class="space-y-6">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-800">Data Pendaftaran</h1>
+            <p class="text-slate-500">Kelola data sekolah, operator, dan siswa yang terdaftar.</p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-3">
+            <!-- Search & Filter Group -->
+            <div class="flex flex-1 sm:flex-none gap-2 bg-white p-1 rounded-xl border border-slate-200 shadow-sm">
+                <!-- Filter Dropdown -->
+                <div class="relative">
+                    <select wire:model.live="jenjang" class="appearance-none pl-3 pr-8 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-medium rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-colors border-none h-full">
+                        <option value="">Semua Jenjang</option>
+                        <option value="SD">SD</option>
+                        <option value="SMP">SMP</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
                 </div>
-                <span class="text-xl font-bold text-slate-800">TKA Center</span>
+
+                <div class="w-px bg-slate-200 my-1"></div>
+
+                <!-- Search Input -->
+                <div class="relative flex-1 sm:w-64">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <input wire:model.live="search" type="text" placeholder="Cari sekolah, NPSN, operator..." class="block w-full pl-9 pr-3 py-2 bg-transparent border-none text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-0 text-sm">
+                </div>
             </div>
-            <nav class="px-3 py-4 space-y-1">
-                <a href="{{ route('dashboard') }}" class="group flex items-center rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900">
-                    <svg class="mr-3 h-5 w-5 text-slate-500 group-hover:text-slate-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M3 9.75V21h6.75v-5.25A2.25 2.25 0 0112 13.5h0a2.25 2.25 0 012.25 2.25V21H21V9.75" />
-                    </svg>
-                    Dashboard
-                </a>
-                <a href="{{ route('registrations') }}" class="group flex items-center rounded-md px-3 py-2 text-sm font-medium bg-blue-600 text-white">
-                    <svg class="mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h18m-12 6h12M3 12h6m-6 6h18" />
-                    </svg>
-                    Data Pendaftaran
-                </a>
-                <a href="{{ route('users') }}" class="group flex items-center rounded-md px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900">
-                    <svg class="mr-3 h-5 w-5 text-slate-500 group-hover:text-slate-700" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75a3.75 3.75 0 00-7.5 0m10.5 0A6.75 6.75 0 006 18.75m10.5 0h3.75M3 18.75h3.75M18 9.75a6 6 0 11-12 0 6 6 0 0112 0z" />
-                    </svg>
-                    Manajemen Pengguna
-                </a>
-            </nav>
-            <form method="POST" action="{{ route('logout') }}" class="mt-auto px-3 pt-2 pb-4">
-                @csrf
-                <x-ui.button variant="outline" class="w-full">Keluar</x-ui.button>
-            </form>
-        </aside>
 
-        <div class="md:pl-64 flex w-full flex-col">
-            <header class="bg-white border-b border-slate-200">
-                <div class="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-                    <h1 class="text-lg sm:text-2xl font-semibold text-slate-900">Data Pendaftaran</h1>
-                </div>
-            </header>
-            <main>
-                <div class="px-4 py-8 sm:px-6 lg:px-8">
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                        <div class="rounded-lg bg-white p-5 shadow">
-                            <div class="text-sm text-slate-500">Total Pengajuan</div>
-                            <div class="mt-1 text-2xl font-semibold text-slate-900">36</div>
-                        </div>
-                        <div class="rounded-lg bg-white p-5 shadow">
-                            <div class="text-sm text-slate-500">Pending</div>
-                            <div class="mt-1 text-2xl font-semibold text-slate-900">9</div>
-                        </div>
-                        <div class="rounded-lg bg-white p-5 shadow">
-                            <div class="text-sm text-slate-500">Disetujui</div>
-                            <div class="mt-1 text-2xl font-semibold text-slate-900">27</div>
-                        </div>
-                    </div>
-
-                    <div class="mt-8">
-                        <h2 class="text-lg font-medium leading-6 text-slate-900">Daftar Pendaftaran Siswa</h2>
-                        <div class="mt-4 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-2xl bg-white border border-slate-200">
-                            <table class="min-w-full divide-y divide-slate-300">
-                                <thead class="bg-slate-50">
-                                    <tr>
-                                        <th class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 sm:pl-6">Nama Siswa</th>
-                                        <th class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Sekolah</th>
-                                        <th class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Kelas</th>
-                                        <th class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Status</th>
-                                        <th class="relative py-3.5 pl-3 pr-4 sm:pr-6"><span class="sr-only">Detail</span></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-200">
-                                    <tr>
-                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6">Budi Santoso</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">SDN 01 Jakarta</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">Kelas 6</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm"><span class="inline-flex rounded-full bg-yellow-100 px-2 text-xs font-semibold leading-5 text-yellow-800">Pending</span></td>
-                                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"><a href="#" class="text-blue-600 hover:text-blue-900">Detail</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6">Siti Aisyah</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">SMPN 3 Bandung</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">Kelas 7</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm"><span class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">Disetujui</span></td>
-                                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"><a href="#" class="text-blue-600 hover:text-blue-900">Detail</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6">Andi Pratama</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">SDN 05 Surabaya</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">Kelas 5</td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm"><span class="inline-flex rounded-full bg-red-100 px-2 text-xs font-semibold leading-5 text-red-800">Ditolak</span></td>
-                                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"><a href="#" class="text-blue-600 hover:text-blue-900">Detail</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </main>
+            <!-- Export Button -->
+            <button wire:click="export" wire:loading.attr="disabled" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-xl shadow-sm hover:shadow transition-all disabled:opacity-70 disabled:cursor-not-allowed">
+                <svg wire:loading.remove wire:target="export" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <svg wire:loading wire:target="export" class="w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="hidden sm:inline">Export Excel</span>
+                <span class="sm:hidden">Export</span>
+            </button>
         </div>
     </div>
+
+    <!-- Table Card -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th scope="col" class="sticky left-0 z-20 bg-slate-50 px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Nama Sekolah</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">NPSN</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">Jenjang</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">Operator</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">Jml Siswa</th>
+                        <th scope="col" class="sticky right-0 z-20 bg-slate-50 px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-slate-200">
+                    @forelse($schools as $school)
+                    <tr class="hover:bg-slate-50 transition-colors group">
+                        <td class="sticky left-0 z-20 bg-white group-hover:bg-slate-50 px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">{{ $school->nama_sekolah }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{{ $school->npsn_sekolah }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $school->jenjang_pendidikan == 'SD' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
+                                {{ $school->jenjang_pendidikan }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                            {{ $school->operator->nama_operator ?? '-' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                            {{ $school->students->count() }}
+                        </td>
+                        <td class="sticky right-0 z-20 bg-white group-hover:bg-slate-50 px-6 py-4 whitespace-nowrap text-right text-sm font-medium shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]">
+                            <button wire:click="showDetail({{ $school->id }})" class="text-blue-600 hover:text-blue-900 font-semibold">Lihat Detail</button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="px-6 py-12 text-center text-slate-500 sticky left-0 right-0 w-full">
+                            <div class="flex flex-col items-center justify-center">
+                                <svg class="w-12 h-12 text-slate-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                                </svg>
+                                <p class="text-lg font-medium text-slate-900">Belum ada data</p>
+                                <p class="text-sm text-slate-500">Belum ada sekolah yang mendaftar atau tidak ditemukan data yang cocok.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <div class="px-6 py-4 border-t border-slate-200">
+            {{ $schools->links() }}
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    @if($showDetailModal && $selectedSchool)
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" wire:click.self="closeDetail">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            <!-- Header -->
+            <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">{{ $selectedSchool->nama_sekolah }}</h2>
+                    <p class="text-sm text-slate-500">NPSN: {{ $selectedSchool->npsn_sekolah }}</p>
+                </div>
+                <button wire:click="closeDetail" class="text-slate-400 hover:text-slate-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Content (Scrollable) -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-8">
+                <!-- Info Operator -->
+                <div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                        Informasi Operator
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div>
+                            <p class="text-xs font-medium text-slate-500 uppercase">Nama Operator</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-900">{{ $selectedSchool->operator->nama_operator ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-500 uppercase">Email Sekolah</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-900">{{ $selectedSchool->operator->email_sekolah ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-500 uppercase">WhatsApp</p>
+                            <p class="mt-1 text-sm font-semibold text-slate-900">{{ $selectedSchool->operator->no_whatsapp ?? '-' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Perangkat -->
+                <div>
+                     <h3 class="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                        Data Perangkat
+                    </h3>
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <p class="text-sm text-blue-800">Jumlah Perangkat yang dilaporkan: <span class="font-bold">{{ $selectedSchool->jumlah_perangkat }} Unit</span></p>
+                    </div>
+                </div>
+
+                <!-- Daftar Siswa -->
+                <div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        Daftar Siswa ({{ $selectedSchool->students->count() }})
+                    </h3>
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">NISN</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">Nama Lengkap</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">L/P</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">TTL</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-slate-200">
+                                @forelse($selectedSchool->students as $student)
+                                <tr>
+                                    <td class="px-4 py-2 text-sm text-slate-900">{{ $student->nisn }}</td>
+                                    <td class="px-4 py-2 text-sm text-slate-900 font-medium">{{ $student->fname }}</td>
+                                    <td class="px-4 py-2 text-sm text-slate-500">{{ $student->jenis_kelamin }}</td>
+                                    <td class="px-4 py-2 text-sm text-slate-500">{{ $student->tempat_lahir }}, {{ \Carbon\Carbon::parse($student->tanggal_lahir)->format('d/m/Y') }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="px-4 py-8 text-center text-sm text-slate-500">Tidak ada data siswa.</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex justify-end">
+                <button wire:click="closeDetail" class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 font-medium text-sm transition-colors">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>
