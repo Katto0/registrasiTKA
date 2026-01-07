@@ -10,36 +10,66 @@ class RegistrationForm extends Component
 {
     use WithFileUploads;
 
-    // --- STATE ---
+    // =========================================================================
+    // 1. STATE PROPERTIES (DATA MODEL)
+    // =========================================================================
+
+    // A. Data Siswa (File Upload)
     public $studentFile;
-    public $schoolLevel = '';
-    public $grade = '';
+
+    // B. Data Sekolah
+    public $schoolLevel = ''; // 'SD' atau 'SMP'
+    public $grade = '';       // '6' atau '9' (Auto-filled)
     public $npsn = '';
     public $schoolName = '';
+
+    // C. Data Operator (Pelapor)
     public $operatorName = '';
     public $phoneNumber = '';
     public $email = '';
+
+    // D. UI State
     public $isSubmitted = false;
 
-    // --- CONFIG ---
-    // Referensi header Excel untuk Backend Developer
-    protected $expectedExcelHeaders = ['Nama Siswa', 'NISN', 'Tempat Lahir', 'Tanggal Lahir'];
+    // =========================================================================
+    // 2. CONFIGURATION & HELPERS
+    // =========================================================================
 
-    // --- VALIDATION ---
-    protected function rules()
+    /**
+     * Mengambil daftar kelas yang valid berdasarkan jenjang.
+     * Digunakan di: rules() dan render().
+     */
+    private function getGradesByLevel(): array
     {
-        $validGrades = match($this->schoolLevel) {
-            'SD' => ['1', '2', '3', '4', '5', '6'],
-            'SMP' => ['7', '8', '9'],
+        return match($this->schoolLevel) {
+            'SD'  => ['6'],
+            'SMP' => ['9'],
             default => []
         };
+    }
 
+    // =========================================================================
+    // 3. VALIDATION RULES
+    // =========================================================================
+
+    protected function rules()
+    {
         return [
-            'studentFile' => ['required', 'file', 'extensions:xlsx,xls,csv', 'max:10240'],
+            // Validasi File: Wajib Excel/CSV, Max 10MB
+            'studentFile' => [
+                'required',
+                'file',
+                'extensions:xlsx,xls,csv',
+                'max:10240'
+            ],
+
+            // Validasi Data Sekolah
             'schoolName'  => ['required', 'min:3', 'max:200', 'regex:/^[a-zA-Z0-9\s\.\,\-\(\)]+$/'],
             'npsn'        => 'required|numeric|digits:8',
             'schoolLevel' => 'required|in:SD,SMP',
-            'grade'       => ['required', Rule::in($validGrades)],
+            'grade'       => ['required', Rule::in($this->getGradesByLevel())],
+
+            // Validasi Data Operator
             'operatorName'=> ['required', 'min:3', 'max:100', 'regex:/^[a-zA-Z\s\.\,\-\']+$/'],
             'phoneNumber' => ['required', 'numeric', 'digits_between:10,15', 'starts_with:08'],
             'email'       => 'required|email:dns,rfc|max:255',
@@ -47,22 +77,26 @@ class RegistrationForm extends Component
     }
 
     protected $messages = [
-        'studentFile.required' => 'Mohon unggah file Excel data siswa.',
-        'numeric' => 'Hanya boleh diisi angka.',
+        'studentFile.required'   => 'Mohon unggah file Excel data siswa.',
+        'studentFile.extensions' => 'Format file harus .xlsx, .xls, atau .csv.',
+        'studentFile.max'        => 'Ukuran file terlalu besar (Maksimal 10MB).',
+        'numeric'                => 'Hanya boleh diisi angka.',
+        'starts_with'            => 'Nomor harus diawali 08.',
     ];
 
-    // --- AUTOMATION LOGIC ---
+    // =========================================================================
+    // 4. LIFECYCLE & EVENT HANDLERS
+    // =========================================================================
 
     /**
-     * Fitur Otomatisasi:
-     * Berjalan otomatis ketika user mengubah dropdown 'schoolLevel'.
+     * UX FEATURE: Auto-Fill Kelas.
+     * Dijalankan otomatis oleh Livewire saat user mengubah dropdown 'schoolLevel'.
      */
     public function updatedSchoolLevel()
     {
-        // Reset dulu agar bersih
-        $this->grade = '';
+        $this->grade = ''; // Reset nilai lama
 
-        // Otomatis pilih kelas akhir berdasarkan jenjang
+        // Set otomatis kelas akhir
         if ($this->schoolLevel === 'SD') {
             $this->grade = '6';
         } elseif ($this->schoolLevel === 'SMP') {
@@ -70,23 +104,40 @@ class RegistrationForm extends Component
         }
     }
 
+    // =========================================================================
+    // 5. SUBMIT ACTIONS
+    // =========================================================================
+
+    /**
+     * Membersihkan input string dari tag HTML berbahaya (Sanitasi).
+     */
     private function sanitizeInput()
     {
         $this->schoolName = strtoupper(strip_tags(trim($this->schoolName)));
         $this->operatorName = ucwords(strtolower(strip_tags(trim($this->operatorName))));
     }
 
+    /**
+     * Handler utama saat tombol Submit ditekan.
+     */
     public function submit()
     {
+        // 1. Sanitasi Data Input
         $this->sanitizeInput();
+
+        // 2. Jalankan Validasi (Sesuai rules di atas)
         $this->validate();
 
-        // --- TODO: BACKEND DEVELOPER ---
-        // 1. Simpan file: $path = $this->studentFile->store('uploads');
-        // 2. Import Excel: Excel::import(new StudentsImport, $path);
-        // 3. Simpan data operator & sekolah.
+        /*
+         * --------------------------------------------------------------------------
+         * BACKEND DEVELOPER - IMPLEMENTASI DATABASE DI SINI
+         * --------------------------------------------------------------------------
+         */
 
-        sleep(2); // Simulasi loading
+        // Simulasi loading proses (hapus saat production)
+        sleep(2);
+
+        // Ubah state UI menjadi sukses
         $this->isSubmitted = true;
     }
 
@@ -98,15 +149,9 @@ class RegistrationForm extends Component
 
     public function render()
     {
-        // Data dropdown kelas dinamis sesuai jenjang
-        $grades = match($this->schoolLevel) {
-            'SD' => ['1', '2', '3', '4', '5', '6'],
-            'SMP' => ['7', '8', '9'],
-            default => []
-        };
-
         return view('livewire.registration-form', [
-            'availableGrades' => $grades
+            // Kirim data kelas ke view menggunakan helper agar konsisten
+            'availableGrades' => $this->getGradesByLevel()
         ]);
     }
 }
