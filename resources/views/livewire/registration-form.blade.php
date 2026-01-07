@@ -4,12 +4,7 @@
     <div class="animate-slide-up text-center py-12">
       <div
         class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-green-50 mb-6 ring-8 ring-green-50/50">
-        <svg class="w-12 h-12 text-green-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-          <path d="m9 12 2 2 4-4" />
-        </svg>
+        <img src="{{ asset('icon/check-circle.svg') }}" class="w-12 h-12 text-green-600" alt="Icon Check Circle">
       </div>
       <h3 class="text-2xl font-bold text-slate-900 mb-3 tracking-tight">
         Data Berhasil Dikirim!
@@ -33,7 +28,6 @@
     </div>
   @else
     {{-- VIEW: FORM INPUT --}}
-
     <div class="mb-8 rounded-xl bg-blue-50/50 border border-blue-100 p-4 flex gap-4 animate-fade-in">
       <div class="shrink-0 mt-0.5">
         <svg class="w-5 h-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -86,15 +80,8 @@
               <p class="text-xs text-slate-500 mb-3">Gunakan template ini dan jangan ubah judul kolom.</p>
               <a href="#"
                 class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-slate-300 shadow-sm text-sm font-medium text-slate-700 hover:text-indigo-600 transition-colors">
-                <svg class="w-4 h-4 text-green-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <path d="M2 15h10" />
-                  <path d="m9 18 3-3-3-3" />
-                </svg>
-                Download Template.xlsx
+                <img src="{{ asset('icon/download.svg') }}" class="w-4 h-4" alt="Icon Download">
+                Download Template
               </a>
             </div>
           </div>
@@ -126,13 +113,9 @@
                     </div>
                   @else
                     <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center">
-                      <svg class="w-8 h-8 mb-3 text-slate-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 20 16">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                      </svg>
+                      <img src="{{ asset('icon/upload.svg') }}" class="w-8 h-8 mb-2" alt="Icon Upload">
                       <p class="mb-1 text-sm text-slate-700 font-medium">Klik untuk upload</p>
-                      <p class="text-xs text-slate-400">Excel (.xlsx) / CSV (Max 10MB)</p>
+                      <p class="text-xs text-slate-400">Excel (.xlsx, .xls) / CSV (Max 10MB)</p>
                     </div>
                   @endif
                   <input id="studentFile" name="studentFile" wire:model="studentFile" type="file" class="hidden"
@@ -311,7 +294,6 @@
           Pastikan seluruh data dalam file Excel sudah benar sebelum dikirim.
         </p>
       </div>
-
     </form>
   @endif
 </div>

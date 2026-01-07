@@ -9,12 +9,7 @@
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
             {{-- Icon BookOpen --}}
-            <svg class="w-6 h-6 text-secondary-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-            </svg>
+            <img src="{{ asset('icon/book.svg') }}" alt="Icon Book Open" class="w-6 h-6 text-secondary-foreground">
           </div>
           <div>
             <h1 class="text-primary-foreground font-bold text-lg">TKA Center</h1>
