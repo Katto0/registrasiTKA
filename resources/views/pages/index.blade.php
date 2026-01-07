@@ -87,7 +87,7 @@
           <span class="text-primary-foreground font-bold">TKA Center</span>
         </div>
         <p class="text-primary-foreground/70 text-sm">
-          © 2025 Excellent Team. Semua hak dilindungi undang-undang.
+          © 2025 Excellent Team. All Rights Reserved.
         </p>
       </div>
     </footer>
