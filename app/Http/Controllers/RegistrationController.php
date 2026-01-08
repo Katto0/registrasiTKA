@@ -16,7 +16,7 @@ class RegistrationController extends Controller
 {
     /**
      * Download Template Excel untuk Data Siswa.
-     * 
+     *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function downloadTemplate()
@@ -26,7 +26,7 @@ class RegistrationController extends Controller
 
     /**
      * Simpan data pendaftaran (Sekolah, Operator, Siswa via Excel).
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -67,7 +67,7 @@ class RegistrationController extends Controller
             );
 
             // Opsional: Jika operator sudah ada, kita bisa update nama/wa-nya agar data terbaru
-            // tapi firstOrCreate hanya create jika belum ada. 
+            // tapi firstOrCreate hanya create jika belum ada.
             // Jika ingin update data operator existing, gunakan updateOrCreate atau manual update.
             // Di sini kita asumsikan data operator existing tetap valid, atau kita update jika diperlukan.
              if (!$operator->wasRecentlyCreated) {
@@ -88,7 +88,7 @@ class RegistrationController extends Controller
                     'jumlah_perangkat' => $request->jumlah_perangkat
                 ]
             );
-            
+
             // Pastikan jika sekolah sudah ada, operatornya disesuaikan (misal ganti operator)
             if (!$school->wasRecentlyCreated) {
                 $school->update(['operator_id' => $operator->id]);
