@@ -13,6 +13,7 @@
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SchoolController;
 use App\Livewire\Dashboard;
+use App\Livewire\ExamSchedules;
 use App\Livewire\Login;
 use App\Livewire\Registrations;
 use App\Livewire\UserManagement;
@@ -53,6 +54,8 @@ Route::middleware('auth')->group(function () {
     
     // Halaman Data Pendaftaran (Tabel Registrasi)
     Route::get('/registrations', Registrations::class)->name('registrations');
+
+    Route::get('/exam-schedules', ExamSchedules::class)->name('exam-schedules');
     
     // Halaman Manajemen User (Admin)
     Route::get('/users', UserManagement::class)->name('users');

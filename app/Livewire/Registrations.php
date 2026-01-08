@@ -18,10 +18,22 @@ class Registrations extends Component
     public $jenjang = ''; // Filter by Jenjang
     public $selectedSchool = null;
     public $showDetailModal = false;
+    public $deleteId = null;
+    public $showDeleteModal = false;
 
     // Reset pagination when filter changes
     public function updatedSearch() { $this->resetPage(); }
     public function updatedJenjang() { $this->resetPage(); }
+
+    public function getStatsProperty()
+    {
+        return [
+            'total_sekolah' => School::count(),
+            'total_siswa' => \App\Models\Student::count(),
+            'total_sd' => School::where('jenjang_pendidikan', 'SD')->count(),
+            'total_smp' => School::where('jenjang_pendidikan', 'SMP')->count(),
+        ];
+    }
 
     public function render()
     {
@@ -40,7 +52,8 @@ class Registrations extends Component
             ->paginate(10);
 
         return view('livewire.registrations', [
-            'schools' => $schools
+            'schools' => $schools,
+            'stats' => $this->stats
         ]);
     }
 
@@ -59,5 +72,32 @@ class Registrations extends Component
     {
         $this->showDetailModal = false;
         $this->selectedSchool = null;
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->deleteId = $id;
+        $this->showDeleteModal = true;
+    }
+
+    public function cancelDelete()
+    {
+        $this->deleteId = null;
+        $this->showDeleteModal = false;
+    }
+
+    public function delete()
+    {
+        if ($this->deleteId) {
+            $school = School::find($this->deleteId);
+            if ($school) {
+                // Delete associated students first (optional if cascade is set in DB, but good for safety)
+                $school->students()->delete();
+                $school->delete();
+                // Optionally delete operator if not used by other schools, but safe to keep
+            }
+        }
+        $this->showDeleteModal = false;
+        $this->deleteId = null;
     }
 }
