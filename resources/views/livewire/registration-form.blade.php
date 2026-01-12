@@ -32,13 +32,6 @@
       </div>
     </div>
 
-    {{-- Error Handler --}}
-    @if ($errors->has('npsn_sekolah') && !is_numeric($errors->first('npsn_sekolah')))
-      <div class="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700">
-        {{ $errors->first('npsn_sekolah') }}
-      </div>
-    @endif
-
     <form wire:submit="submit" method="POST" enctype="multipart/form-data">
 
       {{-- STEP 1: DATA SEKOLAH & OPERATOR --}}
@@ -65,8 +58,8 @@
                 <x-ui.label for="npsn_sekolah" value="NPSN Sekolah *" />
                 <div class="relative">
                   <x-ui.input name="npsn_sekolah" id="npsn_sekolah" type="text" inputmode="numeric" maxlength="8"
-                    wire:model.live.debounce.500ms="npsn_sekolah" placeholder="Ketik 8 Digit NPSN (Pencarian Otomatis)"
-                    :error="$errors->first('npsn_sekolah')" oninput="this.value = this.value.replace(/[^0-9]/g, '')" autocomplete="off" />
+                    wire:model.live.debounce.500ms="npsn_sekolah" placeholder="Ketik 8 Digit NPSN" :error="$errors->first('npsn_sekolah')"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" autocomplete="off" />
 
                   {{-- Loading Indicator --}}
                   <div class="absolute right-3 top-2.5" wire:loading wire:target="npsn_sekolah">
@@ -81,28 +74,49 @@
                   </div>
                 </div>
 
-                {{-- Dropdown Suggestion --}}
-                @if ($showSuggestions && count($searchResults) > 0)
-                  <div
-                    class="absolute z-50 w-full bg-white border border-slate-200 rounded-lg shadow-xl mt-1 max-h-60 overflow-y-auto">
-                    <ul class="py-1 text-sm text-slate-700">
-                      @foreach ($searchResults as $result)
-                        <li
-                          class="cursor-pointer hover:bg-indigo-50 px-4 py-3 border-b border-slate-50 last:border-0 transition-colors"
-                          wire:click="selectSchool('{{ $result['npsn'] }}', '{{ $result['nama'] }}', '{{ $result['jenjang'] }}', '{{ $result['alamat'] }}', '{{ $result['status'] }}')">
-                          <div class="font-semibold text-indigo-700">{{ $result['nama'] }}</div>
-                          <div class="text-xs text-slate-500 mt-1">
-                            NPSN: {{ $result['npsn'] }} • {{ strtoupper($result['jenjang']) }}
-                          </div>
-                        </li>
-                      @endforeach
-                    </ul>
-                  </div>
-                @elseif($showSuggestions && count($searchResults) == 0)
-                  <div
-                    class="absolute z-10 w-full bg-white border border-slate-200 rounded-lg shadow-lg mt-1 p-3 text-sm text-slate-500 text-center">
-                    Data sekolah tidak ditemukan.
-                  </div>
+                {{-- SUGGESTION BOX --}}
+                @if ($showSuggestions)
+                  @if (count($searchResults) > 0)
+                    <div
+                      class="absolute z-50 w-full bg-white border border-slate-200 rounded-lg shadow-xl mt-1 max-h-60 overflow-y-auto">
+                      <ul class="py-1 text-sm text-slate-700">
+                        @foreach ($searchResults as $result)
+                          <li
+                            class="cursor-pointer hover:bg-indigo-50 px-4 py-3 border-b border-slate-50 last:border-0 transition-colors"
+                            {{-- Kirim semua data termasuk status (meski tidak ditampilkan) --}}
+                            wire:click="selectSchool('{{ $result['npsn_sekolah'] }}', '{{ e($result['nama_sekolah']) }}', '{{ $result['jenjang_pendidikan'] }}', '{{ e($result['alamat_sekolah']) }}', '{{ $result['status_sekolah'] }}')">
+
+                            <div class="font-semibold text-indigo-700">
+                              {{ $result['nama_sekolah'] }}
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1 flex flex-col sm:flex-row sm:gap-2">
+                              <span class="font-medium text-slate-900">NPSN: {{ $result['npsn_sekolah'] }}</span>
+                              <span class="hidden sm:inline">•</span>
+                              <span>{{ strtoupper($result['jenjang_pendidikan']) }}</span>
+                            </div>
+                          </li>
+                        @endforeach
+                      </ul>
+                    </div>
+                  @else
+                    {{-- BOX TIDAK DITEMUKAN --}}
+                    <div
+                      class="absolute z-50 w-full bg-orange-50 border border-orange-200 rounded-lg shadow-lg mt-1 p-3 flex items-start gap-3">
+                      <svg class="w-5 h-5 text-orange-500 shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <div class="text-sm text-orange-800">
+                        @if ($apiError)
+                          <span class="font-semibold">Info Sistem:</span> {{ $apiError }}
+                        @else
+                          <span class="font-semibold">Data Tidak Ditemukan.</span>
+                          <p class="text-xs mt-1 text-orange-700">Pastikan NPSN benar.</p>
+                        @endif
+                      </div>
+                    </div>
+                  @endif
                 @endif
               </div>
 
@@ -136,8 +150,8 @@
                   <x-ui.label for="jumlah_perangkat" value="Jumlah Perangkat TKA *" />
                   <span class="text-[10px] text-slate-400 italic">Unit PC/Laptop tersedia</span>
                 </div>
-                <x-ui.input name="jumlah_perangkat" id="jumlah_perangkat" type="number" wire:model="jumlah_perangkat"
-                  placeholder="0" :error="$errors->first('jumlah_perangkat')" />
+                <x-ui.input name="jumlah_perangkat" id="jumlah_perangkat" type="number"
+                  wire:model="jumlah_perangkat" placeholder="0" :error="$errors->first('jumlah_perangkat')" />
               </div>
             </div>
           </div>
