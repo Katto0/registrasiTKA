@@ -5,19 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Student extends Model
+class ExamSession extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'school_id',
-        'nisn',
-        'fname',
-        'tanggal_lahir',
-        'tempat_lahir',
-        'jenis_kelamin',
-        'nama_orangtua',
-        'nomor_orangtua',
+        'exam_date',
+        'session_number',
+        'start_time',
+        'end_time',
+        'capacity',
     ];
 
     public function school()
@@ -25,8 +23,8 @@ class Student extends Model
         return $this->belongsTo(School::class);
     }
 
-    public function examAssignment()
+    public function assignments()
     {
-        return $this->hasOne(ExamAssignment::class);
+        return $this->hasMany(ExamAssignment::class);
     }
 }
