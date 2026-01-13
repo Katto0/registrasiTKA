@@ -56,22 +56,23 @@
               {{-- NPSN (Input Aktif + Search) --}}
               <div class="space-y-2 relative">
                 <x-ui.label for="npsn_sekolah" value="NPSN Sekolah *" />
-                <div class="relative">
-                  <x-ui.input name="npsn_sekolah" id="npsn_sekolah" type="text" inputmode="numeric" maxlength="8"
-                    wire:model.live.debounce.500ms="npsn_sekolah" placeholder="Ketik 8 Digit NPSN" :error="$errors->first('npsn_sekolah')"
-                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" autocomplete="off" />
-
-                  {{-- Loading Indicator --}}
-                  <div class="absolute right-3 top-2.5" wire:loading wire:target="npsn_sekolah">
-                    <svg class="animate-spin h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                      viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                        stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                      </path>
-                    </svg>
+                <div class="flex gap-2">
+                  <div class="relative flex-1">
+                    <x-ui.input name="npsn_sekolah" id="npsn_sekolah" type="text" inputmode="numeric" maxlength="8"
+                      wire:model.blur="npsn_sekolah" placeholder="Ketik 8 Digit NPSN" :error="$errors->first('npsn_sekolah')"
+                      oninput="this.value = this.value.replace(/[^0-9]/g, '')" autocomplete="off" 
+                      wire:keydown.enter="searchSchool" />
                   </div>
+                  
+                  {{-- Search Button --}}
+                  <button type="button" wire:click="searchSchool" 
+                    class="w-24 h-10 flex-shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+                    {{-- Search Icon - static, no loading --}}
+                    <svg class="w-5 h-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <span class="font-medium whitespace-nowrap">Cari</span>
+                  </button>
                 </div>
 
                 {{-- SUGGESTION BOX --}}
@@ -136,13 +137,7 @@
                   :error="$errors->first('jenjang_sekolah')" />
               </div>
 
-              {{-- Alamat (Readonly) --}}
-              <div class="space-y-2">
-                <x-ui.label for="alamat_sekolah" value="Alamat Sekolah (Otomatis)" />
-                <textarea wire:model="alamat_sekolah" id="alamat_sekolah" rows="2" readonly
-                  class="flex w-full rounded-md border border-slate-200 bg-slate-100 text-slate-500 px-3 py-2 text-sm focus:outline-none cursor-not-allowed"
-                  placeholder="-"></textarea>
-              </div>
+
 
               {{-- Jumlah Perangkat (Editable) --}}
               <div class="space-y-2">

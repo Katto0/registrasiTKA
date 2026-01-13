@@ -79,13 +79,34 @@ class RegistrationForm extends Component
         $this->sanitizeNpsn();
         $this->resetAutoFields();
 
-        // Validasi panjang minimal (3 digit)
-        if (strlen($this->npsn_sekolah) < 3) {
+        // Validasi real-time untuk feedback user
+        $length = strlen($this->npsn_sekolah);
+        
+        if ($length > 0 && $length < 8) {
+            // Tampilkan error jika kurang dari 8 digit
+            $this->addError('npsn_sekolah', 'NPSN harus 8 digit lengkap');
+            $this->searchResults = [];
+            $this->showSuggestions = false;
+        } elseif ($length === 8) {
+            // Hapus error jika sudah 8 digit lengkap
+            $this->resetErrorBag('npsn_sekolah');
+        }
+    }
+
+    public function searchSchool()
+    {
+        $this->sanitizeNpsn();
+
+        // Validasi harus 8 digit penuh sebelum search
+        if (strlen($this->npsn_sekolah) !== 8) {
+            $this->addError('npsn_sekolah', 'NPSN harus 8 digit lengkap');
             $this->searchResults = [];
             $this->showSuggestions = false;
             return;
         }
 
+        // Clear error dan lakukan pencarian
+        $this->resetErrorBag('npsn_sekolah');
         $this->performSearch();
     }
 
@@ -244,7 +265,7 @@ class RegistrationForm extends Component
             'npsn_sekolah'         => $this->npsn_sekolah,
             'nama_sekolah'         => $this->nama_sekolah,
             'jenjang_sekolah'      => $this->jenjang_sekolah,
-            'alamat_sekolah'       => $this->alamat_sekolah,
+            'alamat_sekolah'       => $this->alamat_sekolah ?: '-',
             'jumlah_perangkat'     => $this->jumlah_perangkat,
             'nama_operator'        => $this->nama_operator,
             'no_whatsapp_operator' => $this->no_whatsapp_operator,
