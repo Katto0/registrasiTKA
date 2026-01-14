@@ -18,6 +18,31 @@
   @else
     {{-- FORM WIZARD --}}
 
+    {{-- FLASH NOTIFICATIONS --}}
+    @if (session()->has('success'))
+      <div class="mb-6 bg-green-50 border-l-4 border-green-500 text-green-800 px-6 py-4 rounded-lg shadow-sm animate-fade-in flex items-start gap-3">
+        <svg class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+          <p class="font-semibold">Berhasil!</p>
+          <p class="text-sm mt-1">{{ session('success') }}</p>
+        </div>
+      </div>
+    @endif
+
+    @if (session()->has('error'))
+      <div class="mb-6 bg-red-50 border-l-4 border-red-500 text-red-800 px-6 py-4 rounded-lg shadow-sm animate-fade-in flex items-start gap-3">
+        <svg class="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+          <p class="font-semibold">Terjadi Kesalahan!</p>
+          <p class="text-sm mt-1">{{ session('error') }}</p>
+        </div>
+      </div>
+    @endif
+
     <div class="mb-8 flex items-center justify-center gap-4 text-sm font-medium">
       <div class="flex items-center gap-2 {{ $currentStep === 1 ? 'text-indigo-600' : 'text-slate-400' }}">
         <span

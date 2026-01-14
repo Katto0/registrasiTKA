@@ -138,21 +138,37 @@ class RegistrationForm extends Component
         $this->validate(array_merge($this->rulesStep1(), $this->rulesStep2()));
 
         try {
-            $response = Http::withoutVerifying()
-                ->attach(
-                    'file_siswa',
-                    file_get_contents($this->file_siswa->getRealPath()),
-                    $this->file_siswa->getClientOriginalName()
-                )
-                ->post($this->getEndpoint('registrations'), $this->buildPayload());
+            // Build payload data
+            $payload = $this->buildPayload();
+            
+            // Create HTTP request with multipart/form-data and CSRF token
+            $request = Http::withoutVerifying()
+                ->asMultipart()
+                ->withHeaders([
+                    'X-CSRF-TOKEN' => csrf_token(),
+                    'Accept' => 'application/json',
+                ]);
+            
+            // Attach the file
+            $request->attach(
+                'student_file',  // API expects 'student_file' not 'file_siswa'
+                file_get_contents($this->file_siswa->getRealPath()),
+                $this->file_siswa->getClientOriginalName()
+            );
+            
+            // Send POST request with all form fields
+            $response = $request->post($this->getEndpoint('registrations'), $payload);
 
             if ($response->successful()) {
                 $this->isSubmitted = true;
+                session()->flash('success', 'Pendaftaran berhasil dikirim!');
             } else {
                 $this->handleApiError($response);
+                session()->flash('error', 'Gagal mengirim data. Periksa kembali form Anda.');
             }
         } catch (\Exception $e) {
             $this->addError('npsn_sekolah', 'Koneksi gagal: ' . $e->getMessage());
+            session()->flash('error', 'Koneksi ke server gagal. Coba lagi nanti.');
         }
     }
 
@@ -264,15 +280,15 @@ class RegistrationForm extends Component
         return [
             'npsn_sekolah'         => $this->npsn_sekolah,
             'nama_sekolah'         => $this->nama_sekolah,
-            'jenjang_sekolah'      => $this->jenjang_sekolah,
+            'jenjang_pendidikan'   => $this->jenjang_sekolah,  // API expects 'jenjang_pendidikan'
             'alamat_sekolah'       => $this->alamat_sekolah ?: '-',
             'jumlah_perangkat'     => $this->jumlah_perangkat,
             'nama_operator'        => $this->nama_operator,
-            'no_whatsapp_operator' => $this->no_whatsapp_operator,
+            'no_whatsapp'          => $this->no_whatsapp_operator,  // API expects 'no_whatsapp'
             'email_sekolah'        => $this->email_sekolah,
             'status_sekolah'       => $this->status_sekolah,
             'nama_kepala_sekolah'  => $this->nama_kepala_sekolah,
-            'nip_kepala_sekolah'   => $this->nip_kepala_sekolah,
+            'nip_kepala_sekolah'   => $this->nip_kepala_sekolah ?: '',
             'no_hp_kepala_sekolah' => $this->no_hp_kepala_sekolah,
         ];
     }
@@ -280,12 +296,24 @@ class RegistrationForm extends Component
     private function handleApiError($response)
     {
         $errorData = $response->json();
+        
+        // DEBUG: Log full response for troubleshooting
+        \Log::error('API Error Response', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+            'json' => $errorData
+        ]);
+        
         if (isset($errorData['errors'])) {
             foreach ($errorData['errors'] as $field => $messages) {
-                $this->addError($field, $messages[0]);
+                $this->addError($field, is_array($messages) ? $messages[0] : $messages);
             }
+        } elseif (isset($errorData['message'])) {
+            // Tampilkan message dari API
+            $this->addError('npsn_sekolah', $errorData['message']);
         } else {
-            $this->addError('npsn_sekolah', 'Gagal menyimpan data.');
+            // Fallback error dengan status code
+            $this->addError('npsn_sekolah', 'Gagal menyimpan data. (HTTP ' . $response->status() . ')');
         }
     }
 
