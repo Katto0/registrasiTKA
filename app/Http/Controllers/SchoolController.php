@@ -23,8 +23,10 @@ class SchoolController extends Controller
 
         try {
             // Mengambil data dari https://sekolah.devapi.id/sekolah
+            // Menambahkan parameter limit untuk suggestion (default API biasanya 10)
             $response = Http::get("https://sekolah.devapi.id/sekolah", [
-                'npsn' => $npsn
+                'npsn' => $npsn,
+                'limit' => 10 // Membatasi hasil suggestion
             ]);
 
             if ($response->successful()) {
@@ -32,16 +34,14 @@ class SchoolController extends Controller
 
                 // Cek apakah ada data sekolah yang ditemukan
                 if (isset($responseData['data']) && !empty($responseData['data'])) {
-                    // Ambil data pertama dari array hasil pencarian
-                    $schoolData = $responseData['data'][0];
-
-                    // Mapping data sesuai kebutuhan FE
-                    // Jenjang pendidikan diambil dari 'bentukPendidikan'
-                    $mappedData = [
-                        'nama_sekolah' => $schoolData['nama'] ?? null,
-                        'npsn_sekolah' => $schoolData['npsn'] ?? null,
-                        'jenjang_pendidikan' => $schoolData['bentukPendidikan'] ?? null,
-                    ];
+                    // Map semua data yang ditemukan untuk suggestion list
+                    $mappedData = collect($responseData['data'])->map(function($school) {
+                        return [
+                            'nama_sekolah' => $school['nama'] ?? null,
+                            'npsn_sekolah' => $school['npsn'] ?? null,
+                            'jenjang_pendidikan' => $school['bentukPendidikan'] ?? null,
+                        ];
+                    });
 
                     return response()->json($mappedData);
                 } else {
