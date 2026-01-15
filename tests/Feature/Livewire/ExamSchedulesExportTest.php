@@ -84,6 +84,6 @@ class ExamSchedulesExportTest extends TestCase
             ->call('showSessionDetails', $session->id)
             ->assertSet('showDetailModal', true)
             ->assertSet('selectedSession.id', $session->id)
-            ->assertSee($student->nama_siswa);
+            ->assertSee($student->fname);
     }
 }

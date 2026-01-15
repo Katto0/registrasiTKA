@@ -125,8 +125,8 @@
                     <tr>
                         <td class="text-center">{{ $index + 1 }}</td>
                         <td class="text-center">{{ $assignment->seat_number }}</td>
-                        <td>{{ $assignment->student->nama_siswa }}</td>
-                        <td>{{ $assignment->student->nisn_siswa }}</td>
+                        <td>{{ $assignment->student->fname }}</td>
+                        <td>{{ $assignment->student->nisn }}</td>
                     </tr>
                 @empty
                     <tr>
